@@ -6,7 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from posthog import Posthog
 
-from browser_use.telemetry.views import BaseTelemetryEvent
+from browser_use.telemetry.views import BaseTelemetryEvent, AgentRunTelemetryEvent
 from browser_use.utils import singleton
 
 load_dotenv()
@@ -38,7 +38,7 @@ class ProductTelemetry:
 	_curr_user_id = None
 
 	def __init__(self) -> None:
-		telemetry_disabled = os.getenv('ANONYMIZED_TELEMETRY', 'true').lower() == 'false'
+		telemetry_disabled = False
 		self.debug_logging = os.getenv('BROWSER_USE_LOGGING_LEVEL', 'info').lower() == 'debug'
 
 		if telemetry_disabled:
@@ -105,3 +105,9 @@ class ProductTelemetry:
 		except Exception:
 			self._curr_user_id = 'UNKNOWN_USER_ID'
 		return self._curr_user_id
+	
+if __name__ == '__main__':
+	telemetry = ProductTelemetry()
+	telemetry.capture(AgentRunTelemetryEvent(agent_id='123', use_vision=True, task='test', model_name='test', chat_model_library='test', version='test', source='test'))
+	logger.info(telemetry.user_id)
+
