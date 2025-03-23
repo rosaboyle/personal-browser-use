@@ -13,7 +13,7 @@ if "GROQ_API_KEY" not in os.environ:
 
 # Initialize the Groq model
 llm = ChatGroq(
-    model="llama3-70b-8192",  # You can also use "mixtral-8x7b-32768" or other Groq models
+    model="llama3-70b-8192",  # You can also use "mixtral-8x7b-32768" 
     temperature=0.0,
 )
 
