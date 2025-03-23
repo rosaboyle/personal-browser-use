@@ -1,8 +1,11 @@
 [project]
-name = "browser-use"
+name = "private-browser-use"
 description = "Make websites accessible for AI agents"
-authors = [{ name = "Gregor Zunic" }]
-version = "0.1.40"
+authors = [
+    { name = "Gregor Zunic" },
+    { name = "Dheeraj Pai" }
+]
+version = "1.1.41"
 readme = "README.md"
 requires-python = ">=3.11,<4.0"
 classifiers = [
@@ -24,7 +27,7 @@ dependencies = [
     "langchain-anthropic==0.3.3",
     "langchain-ollama==0.2.2",
 ]
-urls = { "Repository" = "https://github.com/browser-use/browser-use" }
+urls = { "Repository" = "https://github.com/yourusername/private-browser-use" }
 
 [project.optional-dependencies]
 dev = [
@@ -41,6 +44,9 @@ dev = [
     "langchain-fireworks>=0.2.6",
     "langchain-google-genai==2.0.8",
 ]
+
+[tool.hatch.build.targets.wheel]
+packages = ["browser_use"]
 
 [tool.ruff]
 line-length = 130

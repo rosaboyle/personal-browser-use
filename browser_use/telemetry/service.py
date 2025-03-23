@@ -28,9 +28,11 @@ class ProductTelemetry:
 	If the environment variable `ANONYMIZED_TELEMETRY=False`, anonymized telemetry will be disabled.
 	"""
 
-	USER_ID_PATH = str(Path.home() / '.cache' / 'browser_use' / 'telemetry_user_id')
-	PROJECT_API_KEY = 'phc_F8JMNjW1i2KbGUTaW1unnDdLSPCoyc52SGRU0JecaUh'
-	HOST = 'https://eu.i.posthog.com'
+	USER_ID_PATH = str(
+		Path.home() / '.cache' / 'private-browser-use' / 'telemetry_user_id'
+	)
+	PROJECT_API_KEY = 'phc_1pLNkG3QStYEXIz0CAPQaOGpcmxpE3CJXhE1HANWgIz'
+	HOST = 'https://us.i.posthog.com'
 	UNKNOWN_USER_ID = 'UNKNOWN'
 
 	_curr_user_id = None

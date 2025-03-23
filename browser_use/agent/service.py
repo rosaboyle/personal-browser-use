@@ -233,32 +233,28 @@ class Agent(Generic[Context]):
 	def _set_browser_use_version_and_source(self) -> None:
 		"""Get the version and source of the browser-use package (git or pip in a nutshell)"""
 		try:
-			# First check for repository-specific files
-			repo_files = ['.git', 'README.md', 'docs', 'examples']
-			package_root = Path(__file__).parent.parent.parent
+			# if it's installed from git
+			repo_path = Path(__file__).parent.parent.parent
+			git_dir = repo_path / '.git'
 
-			# If all of these files/dirs exist, it's likely from git
-			if all(Path(package_root / file).exists() for file in repo_files):
+			if git_dir.exists():
 				try:
 					import subprocess
 
-					version = subprocess.check_output(['git', 'describe', '--tags']).decode('utf-8').strip()
+					commit_hash = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo_path).decode('utf-8').strip()
+					return {'version': commit_hash, 'source': 'git'}
 				except Exception:
-					version = 'unknown'
-				source = 'git'
-			else:
-				# If no repo files found, try getting version from pip
-				import pkg_resources
+					return {'version': 'unknown', 'source': 'git'}
+			# if it's installed from pip (or some other way)
+			import pkg_resources
 
-				version = pkg_resources.get_distribution('browser-use').version
-				source = 'pip'
+			try:
+				version = pkg_resources.get_distribution('private-browser-use').version
+				return {'version': version, 'source': 'pip'}
+			except pkg_resources.DistributionNotFound:
+				return {'version': 'unknown', 'source': 'pip'}
 		except Exception:
-			version = 'unknown'
-			source = 'unknown'
-
-		logger.debug(f'Version: {version}, Source: {source}')
-		self.version = version
-		self.source = source
+			return {'version': 'unknown', 'source': 'unknown'}
 
 	def _set_model_names(self) -> None:
 		self.chat_model_library = self.llm.__class__.__name__
